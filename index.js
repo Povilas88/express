@@ -126,8 +126,12 @@ app.get('/students/:studentName', (req, res) => {
     const student = students[studentName.toLowerCase()];
 
     if (student) {
+        const { name, age, isMarried } = student;
+
         return res.send(
-            `Student: "${student.name}" is ${student.age} years old and is "${student.isMarried ? 'married' : 'not married'}".`
+            `Student: "${name}" is ${age} years old and is "${
+                isMarried ? 'married' : 'not married'
+            }".`
         );
     }
 
