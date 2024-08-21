@@ -1,6 +1,7 @@
 import express from 'express';
 import { servicesData } from './data/servicesData.js';
 import { members } from './data/members.js';
+import { students } from './data/students.js';
 
 const app = express();
 const port = 3000;
@@ -27,7 +28,9 @@ app.get('/services/:serviceName', (req, res) => {
 
 app.get('/services/:serviceName/members', (req, res) => {
     if (servicesData.includes(req.params.serviceName)) {
-        return res.send(`Paslaugos "${req.params.serviceName}" nariu sarasas...`);
+        return res.send(
+            `Paslaugos "${req.params.serviceName}" nariu sarasas...`
+        );
     }
 
     return res.send('Services page: such service is not recognized...');
@@ -41,10 +44,14 @@ app.get('/services/:serviceName/members/:memberName', (req, res) => {
     }
 
     if (!members.includes(memberName)) {
-        return res.send(`Paslaugoje "${serviceName}" nario "${memberName}" nepavyko rasti...`);
+        return res.send(
+            `Paslaugoje "${serviceName}" nario "${memberName}" nepavyko rasti...`
+        );
     }
 
-    return res.send(`Paslaugos "${serviceName}" nario "${memberName}" informacija...`);
+    return res.send(
+        `Paslaugos "${serviceName}" nario "${memberName}" informacija...`
+    );
 });
 
 app.get('/team', (req, res) => {
@@ -55,7 +62,9 @@ app.get('/team/:name', (req, res) => {
     const members = ['chuck', 'lolo', 'prime', 'xena'];
 
     if (members.includes(req.params.name)) {
-        return res.send(`Team member: "${req.params.name}" all info about this person.`);
+        return res.send(
+            `Team member: "${req.params.name}" all info about this person.`
+        );
     }
 
     return res.send(`Team member "${req.params.name}" page not found.`);
@@ -93,15 +102,6 @@ app.get('/nuolaidos/*', (req, res) => {
     return res.send('Gaila, bet tokia nuolaida neveikia');
 });
 
-app.get('*', (req, res) => {
-    return res.send('Ups... 404 page 🛸');
-});
-
-app.listen(port, () => {
-    console.log(`App running on: http://localhost:${port}`);
-});
-
-
 /*
 
 /students
@@ -120,3 +120,24 @@ Studento, vardu chuck nera.
 Studento, vardu Chuck nera.
 
 */
+
+app.get('/students/:studentName', (req, res) => {
+    const { studentName } = req.params;
+    const student = students[studentName.toLowerCase()];
+
+    if (student) {
+        return res.send(
+            `Student: "${student.name}" is ${student.age} years old and is "${student.isMarried ? 'married' : 'not married'}".`
+        );
+    }
+
+    return res.send(`Student: "${studentName}" not found.`);
+});
+
+app.get('*', (req, res) => {
+    return res.send('Ups... 404 page 🛸');
+});
+
+app.listen(port, () => {
+    console.log(`App running on: http://localhost:${port}`);
+});
