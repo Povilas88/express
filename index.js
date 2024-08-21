@@ -121,9 +121,36 @@ Studento, vardu Chuck nera.
 
 */
 
-app.get('/students/:studentName', (req, res) => {
-    const { studentName } = req.params;
-    const student = students[studentName.toLowerCase()];
+app.get('/students', (req, res) => {
+    // const names = [];
+    // for (const key in students) {
+    //     names.push(students[key].name);
+    // }
+    // const names = Object.values(students).map((student) => student.name);
+
+    const names = Object.keys(students).map((key) => students[key].name);
+
+    if (names.length === 0) {
+        return res.send(`Total ${names.length} students: nobody.`);
+    }
+    if (names.length === 1) {
+        return res.send(`Total ${names.length} student: ${names[0]}.`);
+    }
+
+    const str = names.slice(0, -1).join(', ') + ' ir ' + names.at(-1);
+    return res.send(`Total ${names.length} students: ${str}.`);
+});
+
+app.get('/students/:name', (req, res) => {
+    const name = req.params.name.toLowerCase();
+    let student = null;
+
+    for (const key in students) {
+        if (key.toLowerCase() === name) {
+            student = students[key];
+            break;
+        }
+    }
 
     if (student) {
         const { name, age, isMarried } = student;
@@ -133,9 +160,9 @@ app.get('/students/:studentName', (req, res) => {
                 isMarried ? 'married' : 'not married'
             }".`
         );
+    } else {
+        return res.send(`Student: "${studentName}" not found.`);
     }
-
-    return res.send(`Student: "${studentName}" not found.`);
 });
 
 app.get('*', (req, res) => {
