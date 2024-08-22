@@ -5,10 +5,17 @@ import { discountRouter } from './router/discountRouter.js';
 import { studentsRouter } from './router/studentsRouter.js';
 import { booksRouter } from './router/booksRouter.js';
 import { phonesRouter } from './router/phonesRouter.js';
-import { servicesMemberRouter } from './router/serviceMemberRouter.js';
+import { apiRouter } from './router/apiRouter.js';
 
 const app = express();
 const port = 3000;
+
+// for parsing application/json
+app.use(express.json({
+    type: 'application/json',
+}));
+// for parsing application/x-www-form-urlencoded
+app.use(express.urlencoded({ extended: true }));
 
 app.get('/', (req, res) => {
     return res.send('Home page');
@@ -18,6 +25,7 @@ app.get('/about', (req, res) => {
     return res.send('About page');
 });
 
+app.use('/api', apiRouter);
 app.use('/services', servicesRouter);
 app.use('/team', teamRouter);
 app.use('/discount', discountRouter);

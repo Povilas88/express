@@ -15,9 +15,4 @@ servicesRouter.get('/:serviceName', (req, res) => {
     return res.send('Services page: such service is not recognized...');
 });
 
-servicesRouter.use('/:serviceName/members', (req, res, next) => {
-    req.serviceName = req.params.serviceName;
-    next();
-},
-    servicesMemberRouter
-);
+servicesRouter.use('/:serviceName/members', servicesMemberRouter);
